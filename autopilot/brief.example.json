@@ -8,5 +8,7 @@
   "narration": "media/narration.wav",
   "assets": ["media/visual-01.jpg", "media/visual-02.jpg"],
   "output": "output/open-source-ai-tools.mp4",
-  "approval_status": "needs_human_review"
+  "approval_status": "needs_human_review",
+  "audience_made_for_kids": false,
+  "contains_synthetic_media": false
 }
