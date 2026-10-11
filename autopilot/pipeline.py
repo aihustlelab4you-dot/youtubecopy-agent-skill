@@ -164,6 +164,11 @@ class Autopilot:
         report = self.validate_brief(brief, strict_runtime=True)
         if not report["ok"]:
             raise ValueError("Upload blocked: " + "; ".join(report["errors"]))
+        if brief.get("approval_status") != "approved":
+            raise RuntimeError("Upload blocked: set approval_status to 'approved' only after human review of the final render.")
+        for field in ("audience_made_for_kids", "contains_synthetic_media"):
+            if not isinstance(brief.get(field), bool):
+                raise RuntimeError(f"Upload blocked: explicitly review and set '{field}' to true or false in the brief.")
         if os.getenv("YOUTUBE_ALLOW_UPLOAD", "").lower() not in {"1", "true", "yes"}:
             raise RuntimeError("Upload is disabled. Set YOUTUBE_ALLOW_UPLOAD=true only after reviewing the video and configuring OAuth.")
         if os.getenv("YOUTUBE_ALLOW_PUBLIC", "").lower() in {"1", "true", "yes"}:
@@ -185,7 +190,9 @@ class Autopilot:
         body = {"snippet": {"title": brief["title"][:100], "description": str(brief.get("description", ""))[:5000],
                             "tags": brief.get("tags", [])[:30], "categoryId": str(brief.get("category_id", "27")),
                             "defaultLanguage": "en"},
-                "status": {"privacyStatus": "private", "selfDeclaredMadeForKids": False}}
+                "status": {"privacyStatus": "private",
+                           "selfDeclaredMadeForKids": brief["audience_made_for_kids"],
+                           "containsSyntheticMedia": brief["contains_synthetic_media"]}}
         self._set_status(job_id, "uploading")
         try:
             response = youtube.videos().insert(part="snippet,status", body=body,
