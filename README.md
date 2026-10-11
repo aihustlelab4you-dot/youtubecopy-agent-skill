@@ -104,6 +104,12 @@ touches your credentials.
 **Nothing invents a number.** If a skill wants a figure it does not have, it asks you for it or
 writes the line without it.
 
+## YouTube Autopilot (experimental)
+
+This branch adds a local-first, approval-gated workflow foundation for long-form faceless videos: SQLite job tracking, validation, normalized FFmpeg rendering, optional private-only YouTube uploads, analytics retrieval, and scheduled planning checks.
+
+Start with [the setup and safety guide](docs/YOUTUBE_AUTOPILOT.md). The weekly scheduled workflow runs only from the default branch; use `workflow_dispatch` to test it on this branch. Public auto-publishing is not implemented, and no credentials belong in Git.
+
 ## Licence
 
 MIT. Use it, change it, ship it.
