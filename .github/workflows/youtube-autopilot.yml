@@ -1,0 +1,38 @@
+name: YouTube Autopilot (safe scheduled planning)
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Weekly queue/validation run. GitHub scheduled workflows use UTC.
+    - cron: "17 3 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: youtube-autopilot-planning
+  cancel-in-progress: false
+
+jobs:
+  safe-planning:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate the topic queue and CLI
+        run: |
+          python -m compileall -q autopilot
+          python -m autopilot.cli --db data/autopilot.sqlite3 plan autopilot/brief.example.json --job-id scheduled-example
+          python -m autopilot.cli --db data/autopilot.sqlite3 validate scheduled-example
+          python -m autopilot.cli --db data/autopilot.sqlite3 status
+      - name: Preserve planning database and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: youtube-autopilot-planning-${{ github.run_id }}
+          path: data/autopilot.sqlite3
+          if-no-files-found: warn
+          retention-days: 14
