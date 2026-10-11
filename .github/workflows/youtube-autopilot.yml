@@ -3,7 +3,7 @@ name: YouTube Autopilot (safe scheduled planning)
 on:
   workflow_dispatch:
   schedule:
-    # Weekly queue/validation run. GitHub scheduled workflows use UTC.
+    # Weekly queue/validation run. Scheduled workflows use UTC and run only on the default branch.
     - cron: "17 3 * * 1"
 
 permissions:
@@ -22,6 +22,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -v
       - name: Validate the topic queue and CLI
         run: |
           python -m compileall -q autopilot
