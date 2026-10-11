@@ -1,0 +1,12 @@
+{
+  "topic": "A practical introduction to open-source AI tools",
+  "title": "7 Open-Source AI Tools Worth Trying",
+  "description": "A practical, independently researched guide. Sources and credits should be added before publishing.",
+  "tags": ["open source AI", "AI tools", "tutorial"],
+  "category_id": "27",
+  "script": "Replace this sample with your reviewed English narration script. Aim for 1200-2250 words for 8-15 minutes at about 150 words per minute. Cite factual claims and list sources in the description.",
+  "narration": "media/narration.wav",
+  "assets": ["media/visual-01.jpg", "media/visual-02.jpg"],
+  "output": "output/open-source-ai-tools.mp4",
+  "approval_status": "needs_human_review"
+}
