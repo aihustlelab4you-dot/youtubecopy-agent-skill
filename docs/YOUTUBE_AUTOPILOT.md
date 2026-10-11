@@ -40,7 +40,7 @@ The generated MP4 uses H.264/AAC. Review the output for timing, captions, visual
 YOUTUBE_ALLOW_UPLOAD=true python -m autopilot.cli upload <JOB_ID>
 ```
 
-Uploads are always private in this milestone. Public publishing is intentionally unsupported. Never commit OAuth client files, refresh tokens, API keys, or downloaded media with unclear rights. The scheduled planning workflow requires no GitHub secrets.
+Uploads are always private in this milestone. Before upload, set `approval_status` to `approved` only after reviewing the final render, and explicitly review `audience_made_for_kids` and `contains_synthetic_media` in the brief. The example values are placeholders and must be confirmed for each video. Public publishing is intentionally unsupported. Never commit OAuth client files, refresh tokens, API keys, or downloaded media with unclear rights. The scheduled planning workflow requires no GitHub secrets.
 
 Google's YouTube Data API requires OAuth for uploads and applies quotas; see https://developers.google.com/youtube/v3/getting-started and https://developers.google.com/youtube/v3/docs/videos/insert.
 
