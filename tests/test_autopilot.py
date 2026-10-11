@@ -45,6 +45,9 @@ class AutopilotTests(unittest.TestCase):
 
     def test_upload_is_off_by_default(self):
         brief = valid_brief()
+        brief["approval_status"] = "approved"
+        brief["audience_made_for_kids"] = False
+        brief["contains_synthetic_media"] = False
         self.app.create_job(brief, "upload-job")
         with self.assertRaisesRegex(RuntimeError, "Upload is disabled"):
             self.app.upload_private("upload-job")
