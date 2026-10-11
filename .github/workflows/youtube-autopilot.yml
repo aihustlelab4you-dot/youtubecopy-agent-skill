@@ -1,6 +1,8 @@
 name: YouTube Autopilot (safe scheduled planning)
 
 on:
+  pull_request:
+    branches: [main]
   workflow_dispatch:
   schedule:
     # Weekly queue/validation run. Scheduled workflows use UTC and run only on the default branch.
