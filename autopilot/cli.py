@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse, json, logging, os, sys
 from pathlib import Path
 from autopilot.pipeline import Autopilot
+from autopilot.renderer import render_video
 
 def parser():
     p = argparse.ArgumentParser(description="Local-first YouTube Autopilot")
@@ -49,7 +50,7 @@ def main(argv=None):
             if not report["ok"]:
                 return 2
         elif args.command == "render":
-            print(json.dumps({"job_id": args.job_id, "output": str(app.render(args.job_id, args.output))}))
+            print(json.dumps({"job_id": args.job_id, "output": str(render_video(app, args.job_id, args.output))}))
         elif args.command == "upload":
             print(json.dumps(app.upload_private(args.job_id, args.video), indent=2))
         elif args.command == "analytics":
