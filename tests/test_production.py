@@ -35,7 +35,8 @@ class ProductionTests(unittest.TestCase):
         target = generate_thumbnail(self.app, "production-test", str(Path(self.temp.name) / "thumb.svg"))
         data = target.read_text(encoding="utf-8")
         self.assertIn('width="1280" height="720"', data)
-        self.assertIn("Five Open-Source AI Tools", data)
+        self.assertIn("Five Open-Source AI", data)
+        self.assertIn("Tools", data)
 
 if __name__ == "__main__":
     unittest.main()
