@@ -106,7 +106,7 @@ writes the line without it.
 
 ## YouTube Autopilot (experimental)
 
-This branch adds a local-first, approval-gated workflow foundation for long-form faceless videos: SQLite job tracking, validation, normalized FFmpeg rendering, optional private-only YouTube uploads, analytics retrieval, and scheduled planning checks.
+This branch adds a local-first, approval-gated workflow for faceless long-form videos: SQLite job tracking, validation, optional offline Piper narration, approximate SRT captions, an editable SVG thumbnail, normalized FFmpeg rendering, private-only YouTube upload support, analytics retrieval, and scheduled planning checks.
 
 Start with [the setup and safety guide](docs/YOUTUBE_AUTOPILOT.md). The weekly scheduled workflow runs only from the default branch; use `workflow_dispatch` to test it on this branch. Public auto-publishing is not implemented, and no credentials belong in Git.
 
