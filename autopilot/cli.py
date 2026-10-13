@@ -4,6 +4,9 @@ import argparse, json, logging, os, sys
 from pathlib import Path
 from autopilot.pipeline import Autopilot
 from autopilot.renderer import render_video
+from autopilot.tts import synthesize
+from autopilot.captions import generate_captions
+from autopilot.thumbnail import generate_thumbnail
 
 def parser():
     p = argparse.ArgumentParser(description="Local-first YouTube Autopilot")
@@ -19,6 +22,16 @@ def parser():
     render = sub.add_parser("render", help="Render local assets and narration using ffmpeg")
     render.add_argument("job_id")
     render.add_argument("--output")
+    narrate = sub.add_parser("narrate", help="Generate narration locally with Piper TTS")
+    narrate.add_argument("job_id")
+    narrate.add_argument("--output")
+    narrate.add_argument("--model", help="Path to a downloaded Piper .onnx voice model")
+    captions = sub.add_parser("captions", help="Generate an editable SRT sidecar")
+    captions.add_argument("job_id")
+    captions.add_argument("--output")
+    thumbnail = sub.add_parser("thumbnail", help="Generate an editable 1280x720 SVG thumbnail")
+    thumbnail.add_argument("job_id")
+    thumbnail.add_argument("--output")
     upload = sub.add_parser("upload", help="Upload a validated video to YouTube as PRIVATE")
     upload.add_argument("job_id")
     upload.add_argument("--video")
@@ -51,6 +64,12 @@ def main(argv=None):
                 return 2
         elif args.command == "render":
             print(json.dumps({"job_id": args.job_id, "output": str(render_video(app, args.job_id, args.output))}))
+        elif args.command == "narrate":
+            print(json.dumps({"job_id": args.job_id, "narration": str(synthesize(app, args.job_id, args.output, args.model))}))
+        elif args.command == "captions":
+            print(json.dumps({"job_id": args.job_id, "captions": str(generate_captions(app, args.job_id, args.output))}))
+        elif args.command == "thumbnail":
+            print(json.dumps({"job_id": args.job_id, "thumbnail": str(generate_thumbnail(app, args.job_id, args.output))}))
         elif args.command == "upload":
             print(json.dumps(app.upload_private(args.job_id, args.video), indent=2))
         elif args.command == "analytics":
