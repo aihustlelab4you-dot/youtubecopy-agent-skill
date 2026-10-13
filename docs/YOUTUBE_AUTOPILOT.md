@@ -4,6 +4,12 @@ This is a **local-first, zero-paid-service foundation**, not yet a fully unatten
 
 ## What's implemented
 
+- Offline text-to-speech adapter for the Piper CLI, using a locally downloaded voice model.
+- SRT caption sidecars timed approximately to the measured narration duration.
+- Editable 1280x720 SVG thumbnail template.
+- Final audio loudness normalization with FFmpeg's `loudnorm` filter.
+- A short FFmpeg integration test that builds a synthetic fixture and checks the rendered MP4 has video and audio streams.
+
 - Standard-library Python CLI and SQLite job/event store.
 - JSON video brief with English, faceless long-form defaults.
 - Validation of required metadata, asset types, title/description limits, and approximate 8–15 minute script length.
@@ -26,7 +32,25 @@ Copy the example brief, replace the sample script with a reviewed 1,200–2,250 
 python -m autopilot.cli render <JOB_ID>
 ```
 
-The generated MP4 uses H.264/AAC. Review the output for timing, captions, visual rights, audio quality, factual accuracy and synthetic-media disclosures before any upload.
+The generated MP4 uses H.264/AAC with loudness normalization. Review the output for timing, captions, visual rights, audio quality, factual accuracy and synthetic-media disclosures before any upload.
+
+### Generate narration, captions and thumbnail locally
+
+Install the open-source Piper CLI using its official project instructions, then download a voice model and confirm its licence permits your intended use. Put the model outside Git and configure its path:
+
+```bash
+# Set the path to a locally downloaded .onnx voice model; no cloud service is used.
+export PIPER_MODEL="$HOME/voices/en_US-lessac-medium.onnx"
+python -m autopilot.cli narrate <JOB_ID>
+python -m autopilot.cli captions <JOB_ID>
+python -m autopilot.cli thumbnail <JOB_ID>
+python -m autopilot.cli render <JOB_ID>
+```
+
+On Windows PowerShell, set the model path with `$env:PIPER_MODEL="C:\\path\\to\\voice.onnx"`. Piper voice packages may also include a companion JSON config file; keep both together as required by the installed Piper version.
+
+Caption timing is an **approximation based on word count and total audio duration**, not word-level forced alignment. Correct the SRT manually or use a local forced-aligner before publishing. The SVG thumbnail is editable and can be opened in a browser or design tool; it intentionally uses a typographic template rather than downloaded stock imagery.
+
 
 ## YouTube OAuth and private upload
 
@@ -55,7 +79,7 @@ python -m autopilot.cli analytics VIDEO_ID --start-date 2026-01-01 --end-date 20
 ## Important current limitations
 
 - No paid APIs, AI model inference, image generation, web research, or automatic TTS is called. Content still must be created/reviewed using existing skills or another model/local tool.
-- The first renderer is basic: it concatenates supplied clips/stills and narration; it does not yet do intelligent scene selection, burned-in captions, thumbnail creation, or loudness normalization.
+- The renderer is still basic: it divides narration duration evenly across supplied clips/stills. It creates sidecar SRT captions and an SVG thumbnail but does not burn captions into the MP4, intelligently select scenes, or guarantee precise word-level caption alignment.
 - SQLite persists on the machine running the CLI. GitHub Actions runners are ephemeral; the workflow exports a 14-day artifact rather than committing private job data. For durable scheduled production, use a self-hosted runner or persistent storage.
 - Analytics is a read-only first pass. No automatic topic scraping or public publishing is enabled.
 - Human review remains mandatory before upload. Confirm factual claims, source citations, licence/attribution, copyright, privacy, child-directed status, and whether realistic synthetic media needs disclosure.
