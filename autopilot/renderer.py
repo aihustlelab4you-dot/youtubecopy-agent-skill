@@ -67,7 +67,7 @@ def render_video(app, job_id: str, output: str | None = None) -> Path:
         if result.returncode:
             raise RuntimeError("Could not concatenate normalized visuals: " + result.stderr[-1800:])
         cmd = [ffmpeg, "-y", "-i", str(silent), "-i", str(narration), "-map", "0:v:0", "-map", "1:a:0",
-               "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", str(output_path)]
+               "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-af", "loudnorm=I=-16:TP=-1.5:LRA=11", "-shortest", "-movflags", "+faststart", str(output_path)]
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=7200)
         if result.returncode:
             raise RuntimeError("Could not mux narration and visuals: " + result.stderr[-1800:])
