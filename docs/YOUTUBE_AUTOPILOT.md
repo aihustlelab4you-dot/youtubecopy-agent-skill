@@ -78,7 +78,7 @@ python -m autopilot.cli analytics VIDEO_ID --start-date 2026-01-01 --end-date 20
 
 ## Important current limitations
 
-- No paid APIs, AI model inference, image generation, web research, or automatic TTS is called. Content still must be created/reviewed using existing skills or another model/local tool.
+- No paid APIs, hosted AI inference, image generation or web research are called. Piper TTS runs only when you explicitly invoke `narrate` and have installed it plus a local voice model. Scripts and visual assets still need to be created/reviewed using the existing skills or other local tools.
 - The renderer is still basic: it divides narration duration evenly across supplied clips/stills. It creates sidecar SRT captions and an SVG thumbnail but does not burn captions into the MP4, intelligently select scenes, or guarantee precise word-level caption alignment.
 - SQLite persists on the machine running the CLI. GitHub Actions runners are ephemeral; the workflow exports a 14-day artifact rather than committing private job data. For durable scheduled production, use a self-hosted runner or persistent storage.
 - Analytics is a read-only first pass. No automatic topic scraping or public publishing is enabled.
@@ -87,7 +87,7 @@ python -m autopilot.cli analytics VIDEO_ID --start-date 2026-01-01 --end-date 20
 ## Roadmap
 
 1. **Foundation (this branch):** job store, safe schedule, validation, basic renderer, private upload adapter, analytics adapter.
-2. **Production quality:** local TTS integration, subtitles, scene timing, thumbnail templates, audio normalization, render tests.
+2. **Production quality (in progress):** local Piper TTS adapter, approximate SRT captions, SVG thumbnail template, loudness normalization and FFmpeg integration test. Still needed: precise forced alignment, burned-in caption option, better scene timing and thumbnail polish.
 3. **Research and QA:** source ledger, claim-to-source checks, asset licence manifest, originality/copyright checks, content-policy checklist.
 4. **Durable orchestration:** persistent runner/queue, retries, notifications, artifact retention and idempotent scheduling.
 5. **Analytics feedback loop:** performance snapshots, retention-aware recommendations, human-approved next-episode briefs.
