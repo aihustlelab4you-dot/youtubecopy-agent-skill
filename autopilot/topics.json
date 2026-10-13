@@ -1,0 +1,9 @@
+{
+  "language": "English",
+  "format": "faceless narration with locally supplied visuals",
+  "target_duration_minutes": [8, 15],
+  "topics": [
+    {"topic": "A practical introduction to open-source AI tools",
+     "note": "Use only verifiable claims; cite project docs and clearly label limitations."}
+  ]
+}
